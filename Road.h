@@ -17,12 +17,15 @@ class Road {
 
 
     public:
-        //Road();
+        Road();
         Road(int number_of_sections_before_intersection, Intersection* it1, Intersection* it2, Direction direction);
         ~Road();
+        Road(const Road& other);
+        Road(Road&& other);
+        Road& operator=(Road&& other);
+        Road& operator=(Road& other);
 
         Tile* getTile(int index);
-        void setTiles();
         int getLength();
         Direction getDirection();
         bool canDeleteVehicle();

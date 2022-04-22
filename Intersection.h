@@ -15,6 +15,11 @@ class Intersection : public Tile {
     public:
         Intersection(TrafficLight* trafficLight);
         ~Intersection();
+        Intersection(const Intersection& other);
+        Intersection(Intersection&& other);
+        Intersection& operator=(Intersection&& other);
+        Intersection& operator=(Intersection& other);
+
         Tile *getNext() override;
         Tile *getPrev() override;
         Tile *getRight();

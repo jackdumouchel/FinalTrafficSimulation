@@ -10,10 +10,10 @@
 using namespace std;
 
 //Constructor
-//Road::Road(){}
+Road::Road(){}
 
 
-//Consturcotr
+//Constructor
 Road::Road(int number_of_sections_before_intersection, Intersection* it1, Intersection* it2, Direction direction){
 
     //Ensures there is at least one tile before the intersection
@@ -96,6 +96,50 @@ Road::~Road() {
   }
   road.clear();
 }
+
+Road::Road(const Road& other) {
+  road = other.road;
+  roadLength = other.roadLength;
+  direction = other.direction;
+
+}
+
+Road::Road(Road&& other) {
+  road = other.road;
+  roadLength = other.roadLength;
+  direction = other.direction;
+
+  other.road.clear();
+  other.roadLength = 0;
+
+}
+
+Road& Road::operator=(Road& other) {
+  if (this == &other) {
+    return *this;
+  }
+  road = other.road;
+  roadLength = other.roadLength;
+  direction = other.direction;
+
+  return *this;
+}
+
+Road& Road::operator=(Road&& other) {
+  if (this == &other) {
+    return *this;
+  }
+  road = other.road;
+  roadLength = other.roadLength;
+  direction = other.direction;
+
+  other.road.clear();
+  other.roadLength = 0;
+
+  return *this;
+}
+
+
 
 //Connects all of the tiles together in the vector
 

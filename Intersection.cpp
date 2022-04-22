@@ -18,6 +18,63 @@ Intersection::Intersection(TrafficLight *trafficLight) : Tile()
 
 Intersection::~Intersection(){}
 
+
+Intersection::Intersection(const Intersection& other) {
+  north = other.north;
+  south = other.south;
+  east = other.east;
+  west = other.west;
+  trafficLight = other.trafficLight;
+}
+
+Intersection::Intersection(Intersection&& other) {
+  north = other.north;
+  south = other.south;
+  east = other.east;
+  west = other.west;
+  trafficLight = other.trafficLight;
+
+  other.north = nullptr;
+  other.south = nullptr;
+  other.east = nullptr;
+  other.west = nullptr;
+  other.trafficLight = nullptr;
+}
+
+Intersection& Intersection::operator=(Intersection&& other) {
+  if (this == &other) {
+    return *this;
+  }
+  north = other.north;
+  south = other.south;
+  east = other.east;
+  west = other.west;
+  trafficLight = other.trafficLight;
+
+  other.north = nullptr;
+  other.south = nullptr;
+  other.east = nullptr;
+  other.west = nullptr;
+  other.trafficLight = nullptr;
+
+  return *this;
+
+
+}
+
+Intersection& Intersection::operator=(Intersection& other){
+  if (this == &other) {
+    return *this;
+  }
+  north = other.north;
+  south = other.south;
+  east = other.east;
+  west = other.west;
+  trafficLight = other.trafficLight;
+
+  return *this;
+}
+
 /*
  * Override of Tile's getStraight(), determines what direction the vehicle occupying it
  * is going in and returns "straight" for that Vehicle
