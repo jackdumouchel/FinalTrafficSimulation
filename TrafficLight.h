@@ -14,6 +14,9 @@ class TrafficLight {
         TrafficLight();
         TrafficLight(LightColor lightColor, int timeGreen, int timeRed, int timeYellow);
         TrafficLight(const TrafficLight &other);
+        TrafficLight(TrafficLight &&other);
+        TrafficLight& operator=(const TrafficLight& other);
+        TrafficLight& operator=(TrafficLight&& other);
         ~TrafficLight();
         LightColor getLightColor();
         LightColor setLightColor(LightColor lightColor);

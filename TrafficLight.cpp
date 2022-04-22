@@ -39,6 +39,43 @@ TrafficLight::TrafficLight(const TrafficLight &other)
 
 {}
 
+TrafficLight::TrafficLight(TrafficLight &&other)
+    : lightColor(other.lightColor),
+      timeGreen(other.timeGreen),
+      timeRed(other.timeRed),
+      timeYellow(other.timeYellow){
+
+        other.timeGreen = 0;
+        other.timeYellow = 0;
+        other.timeRed = 0;
+}
+
+TrafficLight& TrafficLight::operator=(const TrafficLight& other) {
+  if (this == &other) {
+    return *this;
+  }
+  lightColor = other.lightColor;
+  timeGreen = other.timeGreen;
+  timeRed = other.timeRed;
+  timeYellow = other.timeYellow;
+  return *this;
+}
+
+TrafficLight& TrafficLight::operator=(TrafficLight&& other) {
+  if (this == &other) {
+    return *this;
+  }
+  lightColor = other.lightColor;
+  timeGreen = other.timeGreen;
+  timeRed = other.timeRed;
+  timeYellow = other.timeYellow;
+
+  other.timeGreen = 0;
+  other.timeRed = 0;
+  other.timeYellow = 0;
+  return *this;
+}
+
 //Returns the current light color
 LightColor TrafficLight::getLightColor() {
   return lightColor;

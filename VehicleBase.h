@@ -25,6 +25,9 @@ class VehicleBase
       VehicleBase(VehicleType type, Direction originalDirection, bool turnRight);
       VehicleBase(VehicleType type, Direction originalDirection);
       VehicleBase(const VehicleBase& other);
+      VehicleBase(VehicleBase&& other);
+      VehicleBase& operator=(VehicleBase&& other);
+      VehicleBase& operator=(VehicleBase& other);
       ~VehicleBase();
 
       inline int getVehicleID() const { return this->vehicleID; };
