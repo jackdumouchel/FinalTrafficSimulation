@@ -88,7 +88,7 @@ Road::Road(int number_of_sections_before_intersection, Intersection* it1, Inters
   }
 
 //Destructor
-Road::~Road() { 
+Road::~Road() {
   for (int i = 0; i < this -> road.size(); i++) {
     if(road[i]->getName() == "Tile"){
       delete this -> road[i];
@@ -176,6 +176,7 @@ Tile* Road::findBackofCar(int index) {
       }
     }
   }
+  return nullptr;
 }
 
 void Road::moveVehicleForward(int tileIndex) {
@@ -183,7 +184,7 @@ void Road::moveVehicleForward(int tileIndex) {
     if(getTile(tileIndex)->getNext()->getTileStatus()){
       getTile(tileIndex) -> getNext() -> setOccupiedTile(getTile(tileIndex)->getCurrentVehicle());
       findBackofCar(tileIndex) -> setOpenTile();
-     }  
+     }
   }
 }
 
@@ -194,37 +195,9 @@ void Road::moveVehicles(int number_of_sections_before_intersection, Intersection
       moveVehicleForward(i);
     }
   }
-/*
-      if (i > number_of_sections_before_intersection + 4) {
-        if (getTile(i) == turnTile) {
-          if (getTile(i) -> getCurrentVehicle() -> willTurnRight()) {
-//            moveVehicleRight(i, turnTile);
-          }
-          else {
-
-
-
-            moveVehicleForward(i);
-          }
-        }
-        else {
-          if (getDirection() == getTile(i) -> getCurrentVehicle() -> getVehicleOriginalDirection()) {
-            moveVehicleForward(i);
-          }
-        }
-      }
-
-      else if (i <= number_of_sections_before_intersection + 4){
-        if (light.getLightColor() == LightColor::green) {
-          moveVehicleForward(i);
-        }
-      }
-    }
-  }
-  */
 }
 
-vector<VehicleBase *> Road::getRoadSnapshot() {
+vector<VehicleBase *> Road::currVehicles() {
 	// Initialize vector
 	vector<VehicleBase *> snapshot(roadLength, nullptr);
 
@@ -233,7 +206,7 @@ vector<VehicleBase *> Road::getRoadSnapshot() {
 	{
     if(road[i+4]->containsVehicle()){
       snapshot[i] = road.at(i + 4) -> getCurrentVehicle();
-    }	
+    }
 	}
 	return snapshot;
 }

@@ -56,13 +56,5 @@ void Tile :: setNextTile(Tile *next) {
 void Tile :: setPrevTile(Tile *prev) {
   this -> prevTile = prev;
 }
-/*
-void Tile::setLeftTile(Tile* tile){
-  leftTile = tile;
-}
 
-void Tile::setRightTile(Tile* tile){
-  rightTile = tile;
-}
-*/
 #endif

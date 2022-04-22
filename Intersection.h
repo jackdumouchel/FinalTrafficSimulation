@@ -20,10 +20,10 @@ class Intersection : public Tile {
         Tile *getRight();
         TrafficLight *getTrafficLight();
 
-        inline Tile *getNorth() { return this->north; };
-        inline Tile *getEast() { return this->east; };
-        inline Tile *getSouth() { return this->south; };
-        inline Tile *getWest() { return this->west; };
+        inline Tile *getNorth() { return north; };
+        inline Tile *getEast() { return east; };
+        inline Tile *getSouth() { return south; };
+        inline Tile *getWest() { return west; };
 
         // Setter methods
         inline void setNorth(Tile *north) { this->north = north; }

@@ -1,17 +1,12 @@
-EXECS = test
-OBJS = test.o Animator.o VehicleBase.o Tile.o TrafficLight.o Road.o Intersection.o MoveVehicle.o
+EXECS = simulation
+OBJS = simulation.o Animator.o VehicleBase.o Tile.o TrafficLight.o Road.o Intersection.o MoveVehicle.o
 
-#### use next two lines for Mac
 CC = g++
 CCFLAGS = -std=c++17
 
-#### use next two lines for mathcs* machines:
-#CC = g++
-#CCFLAGS = -std=c++17
-
 all: $(EXECS)
 
-test: $(OBJS)
+simulation: $(OBJS)
 	$(CC) $(CCFLAGS) $^ -o $@
 
 %.o: %.cpp %.h

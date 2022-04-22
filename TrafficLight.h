@@ -21,6 +21,6 @@ class TrafficLight {
         int getTimeRed();
         int getTimeYellow();
         int getTimeChange();
-        void decrement();
+        void decreaseTime();
 };
 #endif

@@ -33,7 +33,7 @@ class Road {
         void moveVehicleRight(int tileIndex, Tile* right);
         Tile* findBackofCar(int index);
         void moveVehicles(int number_of_sections_before_intersection, Intersection* turnTile, TrafficLight light);
-        vector<VehicleBase *> getRoadSnapshot();
+        vector<VehicleBase *> currVehicles();
         void setOccupiedTiles(VehicleBase vehicle);
 
 };

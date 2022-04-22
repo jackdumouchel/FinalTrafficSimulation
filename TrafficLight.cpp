@@ -86,7 +86,7 @@ int TrafficLight::getTimeChange() {
 }
 
 //Decreases the time left before the light changes color by one second
-void TrafficLight::decrement()
+void TrafficLight::decreaseTime()
 {
   timeChange--;
 
