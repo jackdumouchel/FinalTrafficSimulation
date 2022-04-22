@@ -38,15 +38,18 @@ Road::Road(int number_of_sections_before_intersection, Intersection* it1, Inters
       this->road.push_back(tile);
     }
 
-
+    //Adds two intersection tiles
     road.push_back(it1);
     road.push_back(it2);
 
+    //Connects two intersection tile
     prevTile->setNextTile(it1);
     it1->setPrevTile(prevTile);
 
+    //Tile used to connect regular tiles with intersection tiles
     Tile* transition = new Tile();
 
+    //Sets the intersection tiles north, south, east, west
     if(direction == Direction::north){
       it1 -> setSouth(prevTile);
       it1 -> setNorth(it2);
@@ -71,10 +74,10 @@ Road::Road(int number_of_sections_before_intersection, Intersection* it1, Inters
       it2 -> setNorth(it1);
       it2 -> setSouth(transition);
     }
-
     road.push_back(transition);
     prevTile = transition;
 
+    //Adds all the other tiles to the road past the intersection.
     for(int i = 0; i < number_of_sections_before_intersection + 3; i++){
       Tile* tile = new Tile();
 
@@ -97,6 +100,7 @@ Road::~Road() {
   road.clear();
 }
 
+//Copy constructor
 Road::Road(const Road& other) {
   road = other.road;
   roadLength = other.roadLength;
@@ -104,16 +108,19 @@ Road::Road(const Road& other) {
 
 }
 
+//Move constructor
 Road::Road(Road&& other) {
   road = other.road;
   roadLength = other.roadLength;
   direction = other.direction;
 
+  //Canibalizes other
   other.road.clear();
   other.roadLength = 0;
 
 }
 
+//Copy assignment operator
 Road& Road::operator=(Road& other) {
   if (this == &other) {
     return *this;
@@ -125,6 +132,7 @@ Road& Road::operator=(Road& other) {
   return *this;
 }
 
+//Move assignment operator
 Road& Road::operator=(Road&& other) {
   if (this == &other) {
     return *this;
@@ -133,15 +141,12 @@ Road& Road::operator=(Road&& other) {
   roadLength = other.roadLength;
   direction = other.direction;
 
+  //Canibalizes other
   other.road.clear();
   other.roadLength = 0;
 
   return *this;
 }
-
-
-
-//Connects all of the tiles together in the vector
 
 //Returns the road length
 int Road::getLength() {
@@ -198,17 +203,24 @@ Tile* Road::getTile(int index) {
   return this -> road.at(index);
 }
 
+//Finds the back of the car at a specified index
 Tile* Road::findBackofCar(int index) {
+  //If the index specified is 0, that means the car's rear has to be at index 0.
   if (getTile(index) == road.at(0)) {
     return getTile(index);
   }
   else {
+    //Length of car
     int length = getTile(index) -> getCurrentVehicle() -> getLength();
     for (int i = 1; i< length; i++) {
+      //Makes sure that the index - i does not go past index 0.
       if (index -i == 0) {
         return getTile(index-i);
       }
       else {
+        //Checks one of two things:
+        //1. If the tile at index - i has no vehicle, then the next tile must be back of car.
+        //2. If the tile at index - i has another vehicle in it, then the next tile must be back of car.
         if (getTile(index-i) -> containsVehicle() == false) {
           return getTile(index-i+1);
         }
@@ -220,9 +232,12 @@ Tile* Road::findBackofCar(int index) {
       }
     }
   }
+  //Will never be called
   return nullptr;
 }
 
+//Moves the vehicle forward by finding the head of the vehicle and setting the next tile to occupied with the current vehicle in it.
+//Sets the back of the car to open.
 void Road::moveVehicleForward(int tileIndex) {
   if(isFrontofVehicle(tileIndex)){
     if(getTile(tileIndex)->getNext()->getTileStatus()){
@@ -232,7 +247,7 @@ void Road::moveVehicleForward(int tileIndex) {
   }
 }
 
-
+//Moves all vehicles in a road.
 void Road::moveVehicles(int number_of_sections_before_intersection, Intersection* turnTile, TrafficLight light) {
   for (int i = road.size() - 2; i >= 0; i--) {
     if (getTile(i) -> containsVehicle()) {
@@ -241,20 +256,22 @@ void Road::moveVehicles(int number_of_sections_before_intersection, Intersection
   }
 }
 
+//Gets an idea of what cars are eone the road
 vector<VehicleBase *> Road::currVehicles() {
 	// Initialize vector
-	vector<VehicleBase *> snapshot(roadLength, nullptr);
+	vector<VehicleBase *> currentVehicles(roadLength, nullptr);
 
 	// Loop through Tiles and add Vehicle if it is on a Tile
 	for (int i = 0; i < roadLength; i++)
 	{
     if(road[i+4]->containsVehicle()){
-      snapshot[i] = road.at(i + 4) -> getCurrentVehicle();
+      currentVehicles[i] = road.at(i + 4) -> getCurrentVehicle();
     }
 	}
-	return snapshot;
+	return currentVehicles;
 }
 
+//Sets the occupied tiles containing a vehicle in it.
 void Road::setOccupiedTiles(VehicleBase vehicle){
   for(int i = 4; i < vehicle.getLength()+4; i++){
     this->road.at(i)->setOccupiedTile(&vehicle);

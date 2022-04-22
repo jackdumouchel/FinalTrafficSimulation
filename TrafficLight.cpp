@@ -39,17 +39,19 @@ TrafficLight::TrafficLight(const TrafficLight &other)
 
 {}
 
+//Move Constructor
 TrafficLight::TrafficLight(TrafficLight &&other)
     : lightColor(other.lightColor),
       timeGreen(other.timeGreen),
       timeRed(other.timeRed),
       timeYellow(other.timeYellow){
-
+        //Canibalizes other
         other.timeGreen = 0;
         other.timeYellow = 0;
         other.timeRed = 0;
 }
 
+//Copy Assignment Operator
 TrafficLight& TrafficLight::operator=(const TrafficLight& other) {
   if (this == &other) {
     return *this;
@@ -61,6 +63,7 @@ TrafficLight& TrafficLight::operator=(const TrafficLight& other) {
   return *this;
 }
 
+//Move Assignment Operator
 TrafficLight& TrafficLight::operator=(TrafficLight&& other) {
   if (this == &other) {
     return *this;
@@ -69,7 +72,7 @@ TrafficLight& TrafficLight::operator=(TrafficLight&& other) {
   timeGreen = other.timeGreen;
   timeRed = other.timeRed;
   timeYellow = other.timeYellow;
-
+  //Canibalizes other
   other.timeGreen = 0;
   other.timeRed = 0;
   other.timeYellow = 0;
@@ -122,25 +125,28 @@ int TrafficLight::getTimeChange() {
   return timeChange;
 }
 
-//Decreases the time left before the light changes color by one second
+//Decreases the time left before the light changes color by one second. Once the time left equals 0, the light color is changed
+//Green becomes yellow, yellow becomes red, red becomes green
 void TrafficLight::decreaseTime()
 {
+  //Reduces the time of the traffic light
   timeChange--;
-
+  //Once the time change is 0, the lights are set to a different color and the time change is set to the time of that color light
   if (timeChange == 0)
   {
+    //Green set to yellow
     if (lightColor == LightColor::green)
     {
       lightColor = LightColor::yellow;
       timeChange = timeYellow;
     }
-
+    //Yellow set to red
     else if (lightColor == LightColor::yellow)
     {
       lightColor = LightColor::red;
       timeChange = timeRed;
     }
-
+    //Red set to green
     else
     {
       lightColor = LightColor::green;

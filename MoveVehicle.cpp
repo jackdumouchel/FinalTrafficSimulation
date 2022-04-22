@@ -7,45 +7,39 @@
 #include "Intersection.h"
 using namespace std;
 
-// Typical use constructor for Vehicle
+//Constructor
 MoveVehicle::MoveVehicle(VehicleType vehicleType, Direction direction, int vehicleLength, bool willTurnRight) : VehicleBase(vehicleType, direction)
 {
    this->length = vehicleLength;
    this->willTurnRight = willTurnRight; // Whether Vehicle will turn right or now
 }
 
+//Destructor
 MoveVehicle::~MoveVehicle()
 {
 }
 
-// Getter methods
 
-/*
- *  Return the length of the Vehicle
- */
+
+//Returns length of a vehicle
 int MoveVehicle::getLength()
 {
    return length;
 }
 
-/*
- *  Return the current direction of the Vehicle
- */
+//Returns current direction of a vehicle
 Direction MoveVehicle::getCurrDirection()
 {
    return this->currDirection;
 }
 
-/*
- * Private method, sets all the tiles between head and tail to occupied. Also accounts
- * for turns. 
- */
+//Sets all tiles of a vehicle occupying them to occupied
 void MoveVehicle::setOccupiedTiles()
 {
    // Set the Tile where head is to occupied
    this->hptr->setOccupiedTile(this);
 
-   // Start from tail, setting all Tiles in between to occupied
+   //Sets all tiles between head and tail to occupied
    Tile *currTile = this->tptr;
    while (currTile != this->hptr)
    {
@@ -53,11 +47,9 @@ void MoveVehicle::setOccupiedTiles()
       currTile->setOccupiedTile(this);
 
       // Check the current tile is an IntersectionTile to account for turns
-      if (this->isTurningRight && currTile->getName() == "Intersection")
-      {
+      if (this->isTurningRight && currTile->getName() == "Intersection"){
          currTile = dynamic_cast<Intersection *>(currTile)->getRight();
       }
-      // If the next is not IntersectionTile, keep going straight
       else
       {
          currTile = currTile->getNext();
@@ -65,10 +57,7 @@ void MoveVehicle::setOccupiedTiles()
    }
 }
 
-/*
- *  Called when vehicle should "drive" itself on to the road. Passed a pointer to  
- *  the first available tile on a Road, as retrieved by Road.getQueueHead()
- */
+//Allows a vehicle to enter the road.
 void MoveVehicle::enterRoad(Tile *hptr)
 {
    this->hptr = hptr; // Set head pointer
@@ -77,6 +66,7 @@ void MoveVehicle::enterRoad(Tile *hptr)
    // Move the tail backward the length of the car to "drive" on to the Road
    for (int i = 0; i < this->length - 1; i++)
    {
+     //Locates the back of a vehicle
       this->tptr = this->tptr->getPrev();
    }
 
@@ -84,34 +74,28 @@ void MoveVehicle::enterRoad(Tile *hptr)
    this->setOccupiedTiles();
 }
 
-/*
- *   Moves the vehicle forward regardless. This is a private method, and should only be called
- *   from move() to avoid errors.
- */
+//Moves a vehicle forward
 void MoveVehicle::moveForward()
 {
    // Set the previous tile to unoccupied
    Tile *prevt = this->tptr;
 
-   // Move each pointer forward
+   //Moves the front and back of a vehicle
    this->hptr = this->hptr->getNext();
    this->tptr = this->tptr->getNext();
 
-   // Unassign last position
+   //Sets former tile of a vehicle's rear to open since it moves
    prevt->setOpenTile();
 
    // Set the tiles between head and tail to occupied
    this->setOccupiedTiles();
 }
 
-/*
- *  Called for every 'click' of time. Moves the vehicle one Tile and handles turning
- *  by calling external method when the Vehicle reaches an intersection.
- */
+//Moves a vehicle forward or right
 void MoveVehicle::move()
 {
 
-   // If we are turning right, let turnRight() handle the move logic
+   // If vehicle is turning right, it needs to turn right
    if (this->isTurningRight)
    {
       turnRight();
@@ -128,13 +112,13 @@ void MoveVehicle::move()
       // The next tile is an IntersectionTile and we don't already have a green light
       if (next->getName() == "Intersection" && !this->hasGreen)
       {
-         // Cast Tile to IntersectionTile
+         //Tile is now IntersectionTile
          Intersection *it = dynamic_cast<Intersection *>(next);
 
-         // Get the light color from IntersectionTile
+         //Finds the corresponding traffic light color which affects how the vehicle moves
          LightColor lightColor = it->getTrafficLight()->getLightColor();
 
-         // If the light is yellow, only Vehicle can make it
+         // If the light is yellow, only vehicles inside the intersection can move.
          if (lightColor == LightColor::yellow)
          {
             if (it->getTrafficLight()->getTimeChange() >= this->length + 1 && this->willTurnRight)
@@ -149,11 +133,12 @@ void MoveVehicle::move()
                this->moveForward();
             }
          }
+         //If the light color is green, vehicles before the traffic intersection can still move
          else if (lightColor == LightColor::green)
          {
             this->hasGreen = true;
 
-            // If the light is green and Vehicle is turning right, just do it
+            //If a vehicle is turning right, it will turn right.
             if (this->willTurnRight)
             {
                turnRight();
@@ -171,24 +156,24 @@ void MoveVehicle::move()
    }
    else if (next == NULL)
    {
+      //Checks to see if a tile has reached the end of a road
       this->reachedEndOfRoad = true;
 
       Tile *tail = this->tptr;
-
+      //Opens the tiles from the back of a vehicle
       while (tail != hptr)
       {
+        //Opens the tile up so another vehicle can occupy it.
          tail->setOpenTile();
+         //Gets the next tile.
          tail = tail->getNext();
       }
-
+      //Sets the open tile.
       this->hptr->setOpenTile();
    }
 }
 
-/*
- *  When the Vehicle is turning, effectively takes the place of move(); should only be called
- *  by move(). Also, will be called when the head is already on the IntersectionTile
- */
+//Used in move to handle a vehicle turning right
 void MoveVehicle::turnRight()
 {
 
@@ -205,21 +190,22 @@ void MoveVehicle::turnRight()
       Tile *prevt = this->tptr;
       Tile *prevh = this->hptr;
 
-      // Check if the head is on an IntersectionTile (it should be initally)
+      //Starts moving right when a vehicles head is at an intersection
       if (this->hptr->getName() == "Intersection")
       {
          // Downcast to IntersectionTile
          Intersection *headIntersection = dynamic_cast<Intersection *>(this->hptr);
 
-         // Set the head to the right of the IntersectionTile
+         //Gets the right tile next to an intersection
          this->hptr = headIntersection->getRight();
 
-         // Manually move tail pointer
+         //Moves the vehicle right by affecting the tail pointer
          this->tptr->setOpenTile();
          this->tptr = this->tptr->getNext();
-
-         // Set the spot where the head was to unoccupied (unescessary but for consistency)
+/*
+         // Set the spot where the head was to unoccupied
          prevh->setOpenTile();
+*/
       }
       // Check if the tail is on an IntersectionTile
       else if (this->tptr->getName() == "Intersection")
@@ -230,7 +216,7 @@ void MoveVehicle::turnRight()
          // Set the tail to the right of the IntersectionTile
          this->tptr = tailIntersectionTile->getRight();
 
-         // Manually move head pointer
+         //Moves the head of the vehicle
          this->hptr->setOpenTile();
          this->hptr = this->hptr->getNext();
 
@@ -242,28 +228,25 @@ void MoveVehicle::turnRight()
          // If the head and tail are not on IntersectionTiles, move head and tail forward
          moveForward();
       }
+      //Sets tiles between the front and back of the vehicle to occupied
       this->setOccupiedTiles();
       movesLeftInTurn--;
    }
 
-   // If the movesLeftInTurn are used up, set isTurningRight to false
+   //Once the vehicle turns fully right, the boolean isTurningRight should be false.
    if (movesLeftInTurn == 0)
    {
       this->isTurningRight = false;
    }
 }
 
-/*
- * Not currently used, but for left turns might be important.
- */
+//Changes the direction a vehicle, typically used when a vehicle is turning right
 void MoveVehicle::setCurrDirection(Direction direction)
 {
    this->currDirection = direction;
 }
 
 /*
- * Check if a Vehicle can turn right on a red light
- */
 bool MoveVehicle::canTurnRight(Intersection *it)
 {
 
@@ -304,5 +287,6 @@ bool MoveVehicle::canTurnRight(Intersection *it)
 
    return true;
 }
+*/
 
 #endif

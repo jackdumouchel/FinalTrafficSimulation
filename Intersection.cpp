@@ -7,18 +7,17 @@
 #include "VehicleBase.h"
 #include <iostream>
 
-/*
- *  Typical use: IntersectionTile should have a traffic light
- */
+//Constructor
 Intersection::Intersection(TrafficLight *trafficLight) : Tile()
 {
   this->name = "Intersection";
+  //Intersection tile needs a traffic light
   this->trafficLight = trafficLight;
 }
 
 Intersection::~Intersection(){}
 
-
+//Copy constructor
 Intersection::Intersection(const Intersection& other) {
   north = other.north;
   south = other.south;
@@ -27,6 +26,7 @@ Intersection::Intersection(const Intersection& other) {
   trafficLight = other.trafficLight;
 }
 
+//Move constructor
 Intersection::Intersection(Intersection&& other) {
   north = other.north;
   south = other.south;
@@ -41,6 +41,7 @@ Intersection::Intersection(Intersection&& other) {
   other.trafficLight = nullptr;
 }
 
+//Move assignment operator
 Intersection& Intersection::operator=(Intersection&& other) {
   if (this == &other) {
     return *this;
@@ -51,6 +52,7 @@ Intersection& Intersection::operator=(Intersection&& other) {
   west = other.west;
   trafficLight = other.trafficLight;
 
+  //Canibalizes other
   other.north = nullptr;
   other.south = nullptr;
   other.east = nullptr;
@@ -58,10 +60,9 @@ Intersection& Intersection::operator=(Intersection&& other) {
   other.trafficLight = nullptr;
 
   return *this;
-
-
 }
 
+//Copy assignment operator
 Intersection& Intersection::operator=(Intersection& other){
   if (this == &other) {
     return *this;
@@ -76,8 +77,7 @@ Intersection& Intersection::operator=(Intersection& other){
 }
 
 /*
- * Override of Tile's getStraight(), determines what direction the vehicle occupying it
- * is going in and returns "straight" for that Vehicle
+Finds the next tile dependent on a vehicles direction
  */
 Tile* Intersection::getNext() {
   if (getCurrentVehicle() -> getVehicleOriginalDirection() == Direction::north) {
@@ -97,6 +97,9 @@ Tile* Intersection::getNext() {
   }
 }
 
+/*
+Finds the previous tile dependent on a vehicles direction
+ */
 Tile* Intersection::getPrev() {
   if (getCurrentVehicle() -> getVehicleOriginalDirection() == Direction::north) {
     return south;
@@ -115,7 +118,9 @@ Tile* Intersection::getPrev() {
   }
 }
 
-
+/*
+Finds the right tile dependent on a vehicles direction
+ */
 Tile* Intersection::getRight(){
   if (getCurrentVehicle() -> getVehicleOriginalDirection() == Direction::north) {
     return east;
@@ -134,7 +139,7 @@ Tile* Intersection::getRight(){
   }
 }
 
-
+//Returns a traffic light.
 TrafficLight* Intersection::getTrafficLight() {
   return trafficLight;
 }

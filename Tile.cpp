@@ -15,6 +15,7 @@ Tile::~Tile() {
   delete this;
 }
 
+//Copy constructor
 Tile::Tile(const Tile& other) {
   emptyTile = other.emptyTile;
   currentVehicle = other.currentVehicle;
@@ -22,19 +23,21 @@ Tile::Tile(const Tile& other) {
   prevTile = other.prevTile;
 }
 
+//Move constructor
 Tile::Tile(Tile&& other) {
   emptyTile = other.emptyTile;
   currentVehicle = other.currentVehicle;
   nextTile = other.nextTile;
   prevTile = other.prevTile;
 
+  //Canibalizes other
   other.emptyTile = true;
   other.currentVehicle = nullptr;
   other.nextTile = nullptr;
   other.prevTile = nullptr;
 }
 
-
+//Move assignment operator
 Tile& Tile::operator=(Tile&& other) {
   if (this == &other) {
     return *this;
@@ -44,6 +47,7 @@ Tile& Tile::operator=(Tile&& other) {
   nextTile = other.nextTile;
   prevTile = other.prevTile;
 
+  //Canibalizes other
   other.emptyTile = true;
   other.currentVehicle = nullptr;
   other.nextTile = nullptr;
@@ -53,6 +57,7 @@ Tile& Tile::operator=(Tile&& other) {
   return *this;
 }
 
+//Copy assignment operator
 Tile& Tile::operator=(Tile& other) {
   if (this == &other) {
     return *this;

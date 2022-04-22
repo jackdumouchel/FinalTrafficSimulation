@@ -6,6 +6,7 @@
 
 class Intersection : public Tile {
     private:
+        //Member variables
         Tile *north;
         Tile *south;
         Tile *east;
@@ -13,18 +14,19 @@ class Intersection : public Tile {
         TrafficLight *trafficLight;
 
     public:
-        Intersection(TrafficLight* trafficLight);
-        ~Intersection();
-        Intersection(const Intersection& other);
-        Intersection(Intersection&& other);
-        Intersection& operator=(Intersection&& other);
-        Intersection& operator=(Intersection& other);
+        Intersection(TrafficLight* trafficLight); //Constructor
+        ~Intersection(); //Destructor
+        Intersection(const Intersection& other); //Copy constructor
+        Intersection(Intersection&& other); //Move Constructor
+        Intersection& operator=(Intersection&& other); //Move assignment operator
+        Intersection& operator=(Intersection& other); //Copy assignment operator
 
-        Tile *getNext() override;
-        Tile *getPrev() override;
-        Tile *getRight();
-        TrafficLight *getTrafficLight();
+        Tile *getNext() override; //Overrides tile's get next method to be more dependent on vehicle
+        Tile *getPrev() override; //Overrides tile's get prev method to be more dependent on vehicle
+        Tile *getRight(); //Returns right tile to allow a vehicle to turn right
+        TrafficLight *getTrafficLight(); //Returns traffic light
 
+        //Additional getter methods
         inline Tile *getNorth() { return north; };
         inline Tile *getEast() { return east; };
         inline Tile *getSouth() { return south; };
