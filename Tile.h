@@ -16,6 +16,10 @@ class Tile {
     std::string name;
     Tile();
     ~Tile();
+    Tile(const Tile& other);
+    Tile(Tile&& other);
+    Tile& operator=(Tile&& other);
+    Tile& operator=(Tile& other);
 
     virtual Tile *getNext();
     virtual Tile *getPrev();

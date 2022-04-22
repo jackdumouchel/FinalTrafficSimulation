@@ -15,6 +15,56 @@ Tile::~Tile() {
   delete this;
 }
 
+Tile::Tile(const Tile& other) {
+  emptyTile = other.emptyTile;
+  currentVehicle = other.currentVehicle;
+  nextTile = other.nextTile;
+  prevTile = other.prevTile;
+}
+
+Tile::Tile(Tile&& other) {
+  emptyTile = other.emptyTile;
+  currentVehicle = other.currentVehicle;
+  nextTile = other.nextTile;
+  prevTile = other.prevTile;
+
+  other.emptyTile = true;
+  other.currentVehicle = nullptr;
+  other.nextTile = nullptr;
+  other.prevTile = nullptr;
+}
+
+
+Tile& Tile::operator=(Tile&& other) {
+  if (this == &other) {
+    return *this;
+  }
+  emptyTile = other.emptyTile;
+  currentVehicle = other.currentVehicle;
+  nextTile = other.nextTile;
+  prevTile = other.prevTile;
+
+  other.emptyTile = true;
+  other.currentVehicle = nullptr;
+  other.nextTile = nullptr;
+  other.prevTile = nullptr;
+
+
+  return *this;
+}
+
+Tile& Tile::operator=(Tile& other) {
+  if (this == &other) {
+    return *this;
+  }
+  emptyTile = other.emptyTile;
+  currentVehicle = other.currentVehicle;
+  nextTile = other.nextTile;
+  prevTile = other.prevTile;
+
+  return *this;
+}
+
 //Finds the next tile on the road
 Tile* Tile:: getNext() {
   return nextTile;
