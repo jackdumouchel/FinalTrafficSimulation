@@ -246,47 +246,5 @@ void MoveVehicle::setCurrDirection(Direction direction)
    this->currDirection = direction;
 }
 
-/*
-bool MoveVehicle::canTurnRight(Intersection *it)
-{
-
-   if (it->getTrafficLight()->getLightColor() == LightColor::green)
-   {
-      return true;
-   }
-
-   Intersection *it2;
-   switch (this->getVehicleOriginalDirection())
-   {
-   case Direction::north:
-      it2 = dynamic_cast<Intersection *>(it->getWest());
-      break;
-   case Direction::east:
-      it2 = dynamic_cast<Intersection *>(it->getNorth());
-      break;
-   case Direction::south:
-      it2 = dynamic_cast<Intersection *>(it->getEast());
-   case Direction::west:
-      it2 = dynamic_cast<Intersection *>(it->getSouth());
-   }
-
-   if (it2->containsVehicle())
-   {
-      return false;
-   }
-
-   Tile *checkTile = it2->getPrev();
-   for (int i = 0; i < this->length - 1; i++)
-   {
-      if (checkTile->containsVehicle())
-      {
-         return false;
-      }
-      checkTile = checkTile->getPrev();
-   }
-
-   return true;
-}
-*/
 
 #endif

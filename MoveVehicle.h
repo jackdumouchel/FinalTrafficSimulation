@@ -29,7 +29,6 @@ private:
 
   void setOccupiedTiles(); // Set all Tiles between head and tail to occupied
   void moveForward();      // Move the car forward a Tile
-  //bool canTurnRight(Intersection *it);
 
 public:
   //Constructor
